@@ -10,7 +10,7 @@ func Get(url string) string {
     n,_,err := http.Get(http.URLEscape(url));
     var b []byte;
     if err!=nil {
-        fmt.Println("error to read url %s",n);
+        fmt.Println("error to read url ",err,url);
     }else{
         b,_ = ioutil.ReadAll(n.Body);
     }
