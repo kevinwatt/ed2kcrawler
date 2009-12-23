@@ -1,0 +1,9 @@
+
+install mysqlgo
+
+http://github.com/eden/mysqlgo
+
+create a config.inc file
+
+DB = mysql://useraccount:password@127.0.0.1:3306/databasename
+
