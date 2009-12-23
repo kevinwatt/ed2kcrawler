@@ -1,9 +1,15 @@
 
-install mysqlgo
+First install mysqlgo
 
-http://github.com/eden/mysqlgo
+    http://github.com/eden/mysqlgo
 
-create a config.inc file
+Create an config.inc file
 
-DB = mysql://useraccount:password@127.0.0.1:3306/databasename
+    DB = mysql://useraccount:password@127.0.0.1:3306/ED2KDB
+
+Create Database
+
+    mysqladmin -u root -p create ED2KDB
+    mysql -u root -p ED2KDB < ed2kcrawler.sql
+
 
