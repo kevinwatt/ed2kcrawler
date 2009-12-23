@@ -7,10 +7,11 @@ import (
         "strconv";
         "fmt";
         "time";
+        "os";
         "io/ioutil";
 )
 
-func loadconfig() (config map[string]string){
+func loadconfig() (config map[string]string, err os.Error){
     b, err :=ioutil.ReadFile("config.inc");
     config = make(map[string]string);
     if err==nil {
@@ -26,6 +27,8 @@ func loadconfig() (config map[string]string){
                 }
             }
         }
+    }else{
+        err = os.ErrorString("can't load config file")
     }
     return;
 }
@@ -33,10 +36,14 @@ func loadconfig() (config map[string]string){
 func urlparser(id int,size int,c chan string,tf chan int) {
     ed2k,_ := regexp.Compile("href=\"ed2k://");
     re,_ := regexp.Compile("<([^>]|\n)*>|\t|\r");
-    kv:=loadconfig();
+    kv, err :=loadconfig();
+    if err != nil { fmt.Printf("Load error: %s\n",err); }
     conn, err := mysql.Open(kv["DB"]);
     if err != nil { fmt.Printf("Connection error: %s\n",err); }
-    stmt, err := conn.Prepare("INSERT INTO `godba`.`ed2k` (`scheme` ,`type` ,`filename` ,`filesize` ,`hash`,`ori`,`rctime`) VALUES (?,?,?,?,?,?,FROM_UNIXTIME(?))");
+    db_name := kv["DB"][strings.LastIndex(kv["DB"], "/")+1:]
+    coulmlist := "(`scheme` ,`type` ,`filename` ,`filesize` ,`hash`,`ori`,`rctime`) VALUES (?,?,?,?,?,?,FROM_UNIXTIME(?))"
+    sqlcommand:=fmt.Sprintf("%s%s%s%s","INSERT INTO `",db_name,"`.`ed2k` ",coulmlist);
+    stmt, err := conn.Prepare(sqlcommand);
     if err != nil { fmt.Printf("Command error: %s\n",err); }
     for i := 0; i < size; i++ {
         url := <-c;

@@ -4,7 +4,7 @@ Install/Run Example
 
     $ git clone git://github.com/kevinwatt/ed2kcrawler.git
 
-First install mysqlgo
+First, Install mysqlgo
 
     $ http://github.com/eden/mysqlgo
 
