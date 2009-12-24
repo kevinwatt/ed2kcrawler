@@ -11,7 +11,7 @@ First, Install mysqlgo
 Create an config.cnf file
 
     [default]
-    DB = mysql://user:passwd@127.0.0.1:3306/ED2K
+    DB = mysql://user:passwd@127.0.0.1:3306/ED2KDB
     ARS = 10.8.0.1
     ARP = 4712
     ARPS = amulepasswd
