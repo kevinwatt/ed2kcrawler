@@ -12,7 +12,8 @@ main: main.${O}
 	${LD} -o ${TARG} main.${O}
 
 main.${O}: ${GOFILES}
+	${GC} configfile.go
 	${GC} -o main.${O} ${GOFILES}
 
 clean:
-	rm ${TARG};rm *.6
+	rm ${TARG} *.6

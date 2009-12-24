@@ -23,7 +23,7 @@ func loadconfig() (config map[string]string, err os.Error){
             if !strings.HasPrefix(configlist[i],";") || !strings.HasPrefix(configlist[i],"#") {
                 kv:=strings.Split(configlist[i],"=",0);
                 if len(kv)>1{
-                    config[kv[0]]=kv[1];
+                        config[kv[0]]=kv[1];
                 }
             }
         }
@@ -31,6 +31,12 @@ func loadconfig() (config map[string]string, err os.Error){
         err = os.ErrorString("can't load config file")
     }
     return;
+}
+
+func printamule(el string){
+    kv, err :=loadconfig();
+    if err != nil { fmt.Printf("Load error: %s\n",err); }
+    fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",kv["ARS"],kv["ARP"],kv["ARPS"],el);
 }
 
 func urlparser(id int,size int,c chan string,tf chan int) {
@@ -58,11 +64,11 @@ func urlparser(id int,size int,c chan string,tf chan int) {
                 stsli := strings.Split(edurl,"|",0)
                 _, e := conn.Execute(stmt, stsli[0],stsli[1],stsli[2],stsli[3],stsli[4],edurl,strconv.Itoa64(time.Seconds()));
                 if e == nil {
-                    fmt.Printf("%s\n",edurl);
+                    printamule(edurl);
                 }
             }
         }
-        fmt.Printf("ID: %d finsh job %d\n",id,i);
+        fmt.Printf("#ID: %d finsh job %d\n",id,i);
     }
     stmt.Close(); conn.Close();
     tf<-1;
