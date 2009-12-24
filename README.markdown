@@ -14,7 +14,7 @@ Create an config.cnf file
     DB = mysql://user:passwd@127.0.0.1:3306/ED2K
     ARS = 10.8.0.1
     ARP = 4712
-    ARPS = conny
+    ARPS = amulepasswd
 
 
 Create Database
