@@ -11,6 +11,4 @@ CREATE TABLE IF NOT EXISTS `ed2k` (
   `rctime` datetime NOT NULL,
   PRIMARY KEY  (`serial`),
   UNIQUE KEY `hash` (`hash`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=857 ;
-
-
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
