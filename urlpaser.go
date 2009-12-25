@@ -11,9 +11,9 @@ import (
 )
 
 func printamule(el string,p *configfile.ConfigFile){
-    ars,_:=p.GetString("default","ARS")
-    arp,_:=p.GetString("default","ARP")
-    arps,_:=p.GetString("default","ARPS")
+    ars,_:=p.GetString("amule","ARS")
+    arp,_:=p.GetString("amule","ARP")
+    arps,_:=p.GetString("amule","ARPS")
     fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",ars,arp,arps,el)
 }
 
@@ -43,7 +43,7 @@ func urlparser(id int,size int,c chan string,tf chan int) {
                 stsli := strings.Split(edurl,"|",0)
                 _, e := conn.Execute(stmt, stsli[0],stsli[1],stsli[2],stsli[3],stsli[4],edurl,strconv.Itoa64(time.Seconds()));
                 if e == nil {
-                    if p.HasOption("default","ARS"){
+                    if p.HasSection("amule"){
                         printamule(edurl,p)
                     }else{
                         fmt.Printf("%s",edurl)
