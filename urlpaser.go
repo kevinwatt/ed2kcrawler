@@ -1,52 +1,31 @@
 package main
 
 import (
-        "mysql";
-        "regexp";
-        "strings";
-        "strconv";
-        "fmt";
-        "time";
-        "os";
-        "io/ioutil";
+        "mysql"
+        "regexp"
+        "strings"
+        "strconv"
+        "fmt"
+        "time"
+        "./configfile"
 )
 
-func loadconfig() (config map[string]string, err os.Error){
-    b, err :=ioutil.ReadFile("config.inc");
-    config = make(map[string]string);
-    if err==nil {
-        space,_ := regexp.Compile(" ");
-        cont:=string(b);
-        cont=space.ReplaceAllString(cont,"");
-        configlist:=strings.Split(cont, "\n", 0);
-        for i := 0; i < len(configlist); i++ {
-            if !strings.HasPrefix(configlist[i],";") || !strings.HasPrefix(configlist[i],"#") {
-                kv:=strings.Split(configlist[i],"=",0);
-                if len(kv)>1{
-                        config[kv[0]]=kv[1];
-                }
-            }
-        }
-    }else{
-        err = os.ErrorString("can't load config file")
-    }
-    return;
-}
-
-func printamule(el string){
-    kv, err :=loadconfig();
-    if err != nil { fmt.Printf("Load error: %s\n",err); }
-    fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",kv["ARS"],kv["ARP"],kv["ARPS"],el);
+func printamule(el string,p *configfile.ConfigFile){
+    ars,_:=p.GetString("default","ARS")
+    arp,_:=p.GetString("default","ARP")
+    arps,_:=p.GetString("default","ARPS")
+    fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",ars,arp,arps,el)
 }
 
 func urlparser(id int,size int,c chan string,tf chan int) {
     ed2k,_ := regexp.Compile("href=\"ed2k://");
     re,_ := regexp.Compile("<([^>]|\n)*>|\t|\r");
-    kv, err :=loadconfig();
+    p, err := configfile.ReadConfigFile("config.cfg");
     if err != nil { fmt.Printf("Load error: %s\n",err); }
-    conn, err := mysql.Open(kv["DB"]);
+    dblink,_ :=p.GetString("default","DB")
+    conn, err := mysql.Open(dblink);
     if err != nil { fmt.Printf("Connection error: %s\n",err); }
-    db_name := kv["DB"][strings.LastIndex(kv["DB"], "/")+1:]
+    db_name := dblink[strings.LastIndex(dblink, "/")+1:]
     coulmlist := "(`scheme` ,`type` ,`filename` ,`filesize` ,`hash`,`ori`,`rctime`) VALUES (?,?,?,?,?,?,FROM_UNIXTIME(?))"
     sqlcommand:=fmt.Sprintf("%s%s%s%s","INSERT INTO `",db_name,"`.`ed2k` ",coulmlist);
     stmt, err := conn.Prepare(sqlcommand);
@@ -64,7 +43,11 @@ func urlparser(id int,size int,c chan string,tf chan int) {
                 stsli := strings.Split(edurl,"|",0)
                 _, e := conn.Execute(stmt, stsli[0],stsli[1],stsli[2],stsli[3],stsli[4],edurl,strconv.Itoa64(time.Seconds()));
                 if e == nil {
-                    printamule(edurl);
+                    if p.HasOption("default","ARS"){
+                        printamule(edurl,p)
+                    }else{
+                        fmt.Printf("%s",edurl)
+                    }
                 }
             }
         }
