@@ -12,12 +12,10 @@ func Get(url string) string {
     var b []byte;
     if err!=nil {
         fmt.Println("error to read url ",err,url);
-        b = strings.Bytes("null")
     }else{
         b , _ = ioutil.ReadAll(n.Body)
         n.Body.Close();
     }
-
     return string(b);
 }
 
