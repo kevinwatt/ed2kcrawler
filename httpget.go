@@ -1,4 +1,5 @@
 package main
+
 import (
         "http"
         "strings"
@@ -66,6 +67,7 @@ func Get(url string) string {
     //n,_,err := http.Get(http.URLEscape(url));
     var req http.Request
     req.URL, _ = http.ParseURL(http.URLEscape(url));
+    req.UserAgent = "Mozilla/5.0 ed2kcrawler"
     n,err := send(&req);
 
     var b []byte;
