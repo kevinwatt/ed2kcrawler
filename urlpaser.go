@@ -1,13 +1,13 @@
 package main
 
 import (
-        "mysql"
-        "regexp"
-        "strings"
-        "strconv"
-        "fmt"
-        "time"
-        "./configfile"
+        "regexp";
+        "strings";
+        "strconv";
+        "fmt";
+        "time";
+        "mysql";
+        "./configfile";
 )
 
 func printamule(el string,p *configfile.ConfigFile){
