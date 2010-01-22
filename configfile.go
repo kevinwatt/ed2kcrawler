@@ -272,28 +272,22 @@ func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 
 func (c *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
 	if header != "" {
-		if err = buf.WriteString("# " + header + "\n"); err != nil {
-			return err
-		}
+		buf.WriteString("# " + header + "\n");
 	}
-
-	for section, sectionmap := range c.data {
+    for section, sectionmap := range c.data {
 		if section == DefaultSection && len(sectionmap) == 0 {
 			continue	// skip default section if empty
 		}
-		if err = buf.WriteString("[" + section + "]\n"); err != nil {
-			return err
-		}
+		buf.WriteString("[" + section + "]\n");
 		for option, value := range sectionmap {
-			if err = buf.WriteString(option + "=" + value + "\n"); err != nil {
-				return err
-			}
+			buf.WriteString(option + "=" + value + "\n");
 		}
-		if err = buf.WriteString("\n"); err != nil {
-			return err
-		}
+		buf.WriteString("\n");
 	}
-
+    err = buf.Flush()
+    if err != nil {
+        return err
+    }
 	return nil;
 }
 
@@ -307,8 +301,8 @@ func (c *ConfigFile) WriteConfigFile(fname string, perm int, header string) (err
 	if file, err = os.Open(fname, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perm); err != nil {
 		return err
 	}
-
-	buf := bufio.NewWriter(file);
+    const BufSize = 256
+	buf, err := bufio.NewWriterSize(file, BufSize)
 	if err = c.write(buf, header); err != nil {
 		return err
 	}
