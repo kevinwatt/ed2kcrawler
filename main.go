@@ -9,7 +9,7 @@ import (
 func loadlist(m map[int]string) {
     c := make(chan string);
     tf := make(chan int);
-    ts:=3;
+    ts := 3;
     jobsplit:=len(m)/ts;
     jobmod:=len(m)%ts;
     for i := 0; i < ts ; i++ {

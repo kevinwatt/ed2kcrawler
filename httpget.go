@@ -64,7 +64,6 @@ func send(req *http.Request) (resp *http.Response, err os.Error) {
 
 func Get(url string) string {
     n := new(http.Response);
-    //n,_,err := http.Get(http.URLEscape(url));
     var req http.Request
     req.URL, _ = http.ParseURL(http.URLEscape(url));
     req.UserAgent = "Mozilla/5.0 ed2kcrawler"
