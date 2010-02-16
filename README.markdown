@@ -4,14 +4,17 @@ Install/Run Example
 
     $ git clone git://github.com/kevinwatt/ed2kcrawler.git
 
-First, Install mysqlgo
+First, Install Go-MySQL-Client-Library
 
-    http://github.com/eden/mysqlgo
+    http://github.com/thoj/Go-MySQL-Client-Library
 
 Create an config.cfg file
 
     [default]
-    DB = mysql://user:passwd@127.0.0.1:3306/ED2KDB
+    DBA = user
+    DBP = password
+    DBIP = 127.0.0.1:3306
+    DBN = ED2KDB
 
     [amule]
     ARS = 10.8.0.1
