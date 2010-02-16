@@ -9,15 +9,16 @@ import (
 func loadlist(m map[int]string) {
     c := make(chan string);
     tf := make(chan int);
+    DBI:=newDBI()
     ts := 3;
     jobsplit:=len(m)/ts;
     jobmod:=len(m)%ts;
     for i := 0; i < ts ; i++ {
         if jobmod>0 {
-            go urlparser(i,jobsplit+1,c,tf);
+            go DBI.urlparser(i,jobsplit+1,c,tf);
             jobmod--;
         }else{
-            go urlparser(i,jobsplit,c,tf);
+            go DBI.urlparser(i,jobsplit,c,tf);
         }
     }
     // Sending jobs to each go channel.
