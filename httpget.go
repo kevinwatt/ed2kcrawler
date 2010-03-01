@@ -29,7 +29,7 @@ func send(req *http.Request) (resp *http.Response, err os.Error) {
     if len(info) > 0 {
         enc := base64.URLEncoding
         encoded := make([]byte, enc.EncodedLen(len(info)))
-        enc.Encode(encoded, strings.Bytes(info))
+        enc.Encode(encoded, []byte(info))
         if req.Header == nil {
             req.Header = make(map[string]string)
         }
