@@ -4,6 +4,7 @@ import (
         "fmt";
         "strings";
         "flag";
+        "runtime";
 )
 
 func loadlist(m map[int]string) {
@@ -11,6 +12,7 @@ func loadlist(m map[int]string) {
     tf := make(chan int);
     DBI:=newDBI()
     ts := 3;
+    runtime.GOMAXPROCS(ts)
     jobsplit:=len(m)/ts;
     jobmod:=len(m)%ts;
     for i := 0; i < ts ; i++ {
@@ -41,7 +43,6 @@ func help(){
 func main() {
     var Loadpagelist = flag.Bool("l", false, "\tLoad the ed2klink page url list")
     flag.Parse();
-
     if *Loadpagelist {
         listfilename:=flag.Arg(0);
         m,err:=loadvv(listfilename);

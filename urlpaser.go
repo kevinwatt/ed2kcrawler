@@ -6,7 +6,7 @@ import (
         "strconv";
         "fmt";
         "time";
-        "mysql";
+        mysql "github.com/thoj/Go-MySQL-Client-Library";
         "./configfile";
 )
 

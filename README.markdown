@@ -6,7 +6,7 @@ Install/Run Example
 
 First, Install Go-MySQL-Client-Library
 
-    http://github.com/thoj/Go-MySQL-Client-Library
+    goinstall -dashboard=true github.com/thoj/Go-MySQL-Client-Library
 
 Create an config.cfg file
 
