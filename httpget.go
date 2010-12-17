@@ -3,7 +3,7 @@ package main
 import (
         "http"
         "strings"
-        "fmt"
+        //"fmt"
         "io/ioutil"
         "net"
         "strconv"
@@ -25,7 +25,7 @@ func send(req *http.Request) (resp *http.Response, err os.Error) {
     if !hasPort(addr) {
         addr += ":http"
     }
-    info := req.URL.Userinfo
+    info := req.URL.RawUserinfo
     if len(info) > 0 {
         enc := base64.URLEncoding
         encoded := make([]byte, enc.EncodedLen(len(info)))
@@ -35,9 +35,13 @@ func send(req *http.Request) (resp *http.Response, err os.Error) {
         }
         req.Header["Authorization"] = "Basic " + string(encoded)
     }
-    conn, err := net.Dial("tcp", "", addr)
-    if err != nil {
-        return nil, err
+
+    var conn io.ReadWriteCloser
+    if req.URL.Scheme == "http" {
+        conn, err = net.Dial("tcp", "", addr)
+        if err != nil {
+            return nil, err
+        }
     }
 
     err = req.Write(conn)
@@ -63,6 +67,7 @@ func send(req *http.Request) (resp *http.Response, err os.Error) {
 }
 
 func Get(url string) string {
+    /*
     n := new(http.Response);
     var req http.Request
     req.URL, _ = http.ParseURL(http.URLEscape(url));
@@ -76,6 +81,12 @@ func Get(url string) string {
         b , _ = ioutil.ReadAll(n.Body)
         n.Body.Close();
     }
+    */
+    var b []byte;
+    resp,_,_ := http.Get(url)
+    b , _ = ioutil.ReadAll(resp.Body)
+    resp.Body.Close();
+
     return string(b);
 }
 

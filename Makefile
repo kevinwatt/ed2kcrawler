@@ -7,9 +7,10 @@ GOFILES=\
         loadfile.go\
         httpget.go\
         urlpaser.go\
+        store.go\
 
 main: main.${O}
-	${LD} -o ${TARG} main.${O}
+	${LD} -s -o ${TARG} main.${O}
 
 main.${O}: ${GOFILES}
 	${GC} configfile.go

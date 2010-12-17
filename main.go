@@ -4,33 +4,48 @@ import (
         "fmt";
         "strings";
         "flag";
-        "runtime";
 )
 
 func loadlist(m map[int]string) {
+    //store:=NewURLStore("store.gmap")
     c := make(chan string);
     tf := make(chan int);
-    DBI:=newDBI()
-    ts := 3;
-    runtime.GOMAXPROCS(ts)
+    s := &URLParse{
+        ed2kurldb: NewURLStore("ed2kurl.gmap"),
+    }
+
+    /*
     jobsplit:=len(m)/ts;
     jobmod:=len(m)%ts;
     for i := 0; i < ts ; i++ {
         if jobmod>0 {
-            go DBI.urlparser(i,jobsplit+1,c,tf);
+            s.id=i;
+            s.size=jobsplit+1
+            s.tf=tf
+            go s.urlparser(c);
             jobmod--;
         }else{
-            go DBI.urlparser(i,jobsplit,c,tf);
+            s.id=i;
+            s.size=jobsplit
+            s.tf=tf
+            go s.urlparser(c);
         }
     }
-    // Sending jobs to each go channel.
+    */
+    s.id=0;
+    s.size=len(m)
+    s.tf=tf
+    go s.urlparser(c);
+
     for _, url := range m {
         c <- url;
+        //var h hash.Hash = md5.New()
+        //h.Write([]byte(url))
+        //urlmd5:=h.Sum()
+        //urlmd5:=fmt.Sprintf("%x", h.Sum())
+        //store.Put(&url, &urlmd5);
     }
-    // Waiting for all of those threads are finsh.
-    for i := 0; i < ts ; i++ {
-        <-tf;
-    }
+    print(<-s.tf);
 }
 
 func help(){
