@@ -13,7 +13,6 @@ type URLParse struct {
     ed2kurldb       *URLStore
     size            int
     id              int
-    tf              chan int
 }
 
 func printamule(el string,p *configfile.ConfigFile){
@@ -23,7 +22,7 @@ func printamule(el string,p *configfile.ConfigFile){
     fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",ars,arp,arps,el)
 }
 
-func (up *URLParse) urlparser(c chan string) {
+func (up *URLParse) urlparser(c chan string, tf chan int) {
     ed2k,_ := regexp.Compile("href=\"ed2k://");
     re,_ := regexp.Compile("<([^>]|\n)*>|\t|\r");
     //ed2kurldb:=NewURLStore("ed2kurl.gmap")
@@ -56,7 +55,7 @@ func (up *URLParse) urlparser(c chan string) {
                     key:=spedurl[4]
                     var getedurl string;
                     if up.ed2kurldb.Get(&key,&getedurl); len(getedurl) < 1 {
-                        fmt.Printf("getedurl < 1 ::: %s %s\n",edurl,key);
+                        fmt.Printf("%s\n",edurl);
                         //ed2kurldb.Get(&key,&getedurl);
                         //fmt.Printf("%s %s\n",getedurl,key);
                         up.ed2kurldb.Put(&edurl,&key);
@@ -65,8 +64,9 @@ func (up *URLParse) urlparser(c chan string) {
             }
         }
     }
-    fmt.Printf("%d finsh\n",up.id);
-    up.tf<-1;
+    //fmt.Printf("%d finsh\n",up.id);
+    up.ed2kurldb.save()
+    tf<-up.id;
     return;
 }
 

@@ -39,7 +39,7 @@ func NewURLStore(filename string) *URLStore {
 }
 
 func (s *URLStore) Get(key, url *string) os.Error {
-	log.Println("URLStore: Get", *key)
+	//log.Println("URLStore: Get", *key)
 	if u := s.urls.Get(*key); u != "" {
 		*url = u
 		return nil
