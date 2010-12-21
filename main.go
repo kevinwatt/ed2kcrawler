@@ -4,41 +4,44 @@ import (
         "fmt";
         "strings";
         "flag";
+        "time"
 )
 
 func loadlist(m map[int]string) {
-    //store:=NewURLStore("store.gmap")
     c := make(chan string);
-    tf := make(chan int);
-    /*
-    s := &URLParse{
-        ed2kurldb: NewURLStore("ed2kurl.gmap"),
-    }
-    */
+    tf := make(chan map[string]string);
     ts := 3
     jobsplit:=len(m)/ts;
     jobmod:=len(m)%ts;
     for i := 0; i < ts ; i++ {
+        s := &URLParse{} //{ ed2kurldb: NewURLStore("ed2kurl.gmap") }
+        s.id=i;
         if jobmod>0 {
-            s := &URLParse{ ed2kurldb: NewURLStore("ed2kurl.gmap") }
-            s.id=i;
             s.size=jobsplit+1
-            go s.urlparser(c,tf);
             jobmod--;
         }else{
-            s := &URLParse{ ed2kurldb: NewURLStore("ed2kurl.gmap") }
-            s.id=i;
             s.size=jobsplit
-            go s.urlparser(c,tf);
         }
+        go s.urlparser(c,tf);
     }
 
     for _, url := range m {
         c <- url;
     }
+    ed2kurldb:=NewURLStore("ed2kurl.gmap")
+    lock:=0
     for i := 0; i < ts ; i++ {
-        print(<-tf);
+        for k, v := range <-tf {
+            bull:=""
+            if err:=ed2kurldb.Get(&k,&bull);err!=nil {
+                fmt.Printf("%s\n",v);
+                ed2kurldb.Put(&v, &k)
+                lock=1
+            }
+        }
     }
+    if lock==1 { ed2kurldb.dirty <- true }
+    time.Sleep(2e9)
 }
 
 func help(){

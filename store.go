@@ -55,6 +55,8 @@ func (s *URLStore) Put(url, key *string) os.Error {
 		//s.count++
 		if u := s.urls.Get(*key); u == "" {
 			break
+        }else{
+            log.Println("URLStore: Put", u)
         }
 	}
     s.urls.Set(*key, *url)
