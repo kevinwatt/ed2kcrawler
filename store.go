@@ -87,9 +87,7 @@ func (s *URLStore) saveLoop() {
 	for {
 		<-s.dirty
 		log.Println("URLStore: saving")
-		if err := s.save(); err != nil {
-			log.Println("URLStore:", err)
-		}
+		if err := s.save(); err != nil { log.Println("URLStore:", err) }
 		time.Sleep(saveTimeout)
 	}
 }

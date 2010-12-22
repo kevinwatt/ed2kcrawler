@@ -3,22 +3,11 @@ package main
 import (
         "regexp";
         "strings";
-        //"strconv";
-        "fmt";
-        //"time";
-        "./configfile";
 )
 
 type URLParse struct {
     id              int
     size            int
-}
-
-func printamule(el string,p *configfile.ConfigFile){
-    ars,_:=p.GetString("amule","ARS")
-    arp,_:=p.GetString("amule","ARP")
-    arps,_:=p.GetString("amule","ARPS")
-    fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",ars,arp,arps,el)
 }
 
 func (up *URLParse) urlparser(c chan string, tf chan map[string]string) {

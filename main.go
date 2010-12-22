@@ -1,10 +1,10 @@
 package main
 
 import (
-        "fmt";
-        "strings";
-        "flag";
-        "time"
+        "fmt"
+        "strings"
+        "flag"
+        "./configfile"
 )
 
 func loadlist(m map[int]string) {
@@ -28,20 +28,29 @@ func loadlist(m map[int]string) {
     for _, url := range m {
         c <- url;
     }
+    p, _ := configfile.ReadConfigFile("config.cfg");
+
     ed2kurldb:=NewURLStore("ed2kurl.gmap")
     lock:=0
     for i := 0; i < ts ; i++ {
         for k, v := range <-tf {
             bull:=""
             if err:=ed2kurldb.Get(&k,&bull);err!=nil {
-                fmt.Printf("%s\n",v);
+                printamule(v,p)
                 ed2kurldb.Put(&v, &k)
                 lock=1
             }
         }
     }
-    if lock==1 { ed2kurldb.dirty <- true }
-    time.Sleep(2e9)
+    if lock==1 { ed2kurldb.save(); }
+    //ed2kurldb.dirty <- true }
+}
+
+func printamule(el string,p *configfile.ConfigFile){
+    ars,_:=p.GetString("amule","ARS")
+    arp,_:=p.GetString("amule","ARP")
+    arps,_:=p.GetString("amule","ARPS")
+    fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",ars,arp,arps,el)
 }
 
 func help(){
