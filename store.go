@@ -92,7 +92,6 @@ func (s *URLStore) saveLoop() {
 	}
 }
 
-
 type ProxyStore struct {
 	urls   *URLMap
 	client *rpc.Client
