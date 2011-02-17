@@ -61,7 +61,10 @@ func (s *URLStore) Put(url, key *string) os.Error {
 	}
     s.urls.Set(*key, *url)
     s.mu.Unlock()
-    _ = s.dirty <- true
+    select {
+        case s.dirty <- true:
+        default:
+    }
 	return nil
 }
 

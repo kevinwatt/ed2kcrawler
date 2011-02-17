@@ -5,6 +5,7 @@ import (
         "strings"
         "io"
         "io/ioutil"
+        "os"
 )
 
 type readClose struct {
@@ -14,13 +15,12 @@ type readClose struct {
 
 func hasPort(s string) bool { return strings.LastIndex(s, ":") > strings.LastIndex(s, "]") }
 
-func Get(url string) string {
-    var b []byte;
-    resp,_,_ := http.Get(url)
-    b , _ = ioutil.ReadAll(resp.Body)
+func Get(url string) (string, os.Error) {
+    //var b []byte;
+    resp,_,err := http.Get(url)
+    b , _ := ioutil.ReadAll(resp.Body)
     resp.Body.Close();
-
-    return string(b);
+    return string(b),err
 }
 
 func URLUnescape(edurl string) string {
