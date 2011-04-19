@@ -69,7 +69,7 @@ func (s *URLStore) Put(url, key *string) os.Error {
 }
 
 func (s *URLStore) load() os.Error {
-	f, err := os.Open(s.filename, os.O_RDONLY, 0)
+	f, err := os.Open(s.filename)
 	if err != nil {
 		return err
 	}
@@ -78,7 +78,7 @@ func (s *URLStore) load() os.Error {
 }
 
 func (s *URLStore) save() os.Error {
-	f, err := os.Open(s.filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+	f, err := os.Create(s.filename)
 	if err != nil {
 		return err
 	}
@@ -143,20 +143,19 @@ func NewURLMap() *URLMap {
 
 func (m *URLMap) Set(key, url string) {
 	m.mu.Lock()
+    defer m.mu.Unlock()
 	m.urls[key] = url
-	m.mu.Unlock()
 }
 
-func (m *URLMap) Get(key string) (url string) {
+func (m *URLMap) Get(key string) string {
 	m.mu.RLock()
-	url = m.urls[key]
-	m.mu.RUnlock()
-	return
+	defer m.mu.RUnlock()
+	return m.urls[key]
 }
 
 func (m *URLMap) WriteTo(w io.Writer) os.Error {
 	m.mu.RLock()
-	defer m.mu.RUnlock()
+	defer m.mu.RUnlock() //當function結束時, 呼叫defer
 	e := gob.NewEncoder(w)
 	return e.Encode(m.urls)
 }

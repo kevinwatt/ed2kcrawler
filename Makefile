@@ -1,5 +1,5 @@
 #not an actual package yet: just main functions. This file produces an executable, main
-include $(GOROOT)/src/Make.$(GOARCH)
+include $(GOROOT)/src/Make.inc
 
 TARG=ed2kcrawler
 GOFILES=\

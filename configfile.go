@@ -253,7 +253,7 @@ func (c *ConfigFile) read(buf *bufio.Reader) (err os.Error) {
 func ReadConfigFile(fname string) (c *ConfigFile, err os.Error) {
 	var file *os.File;
 
-	if file, err = os.Open(fname, os.O_RDONLY, 0); err != nil {
+	if file, err = os.Open(fname); err != nil {
 		return nil, err
 	}
 
@@ -298,7 +298,7 @@ func (c *ConfigFile) write(buf *bufio.Writer, header string) (err os.Error) {
 func (c *ConfigFile) WriteConfigFile(fname string, perm uint32, header string) (err os.Error) {
 	var file *os.File;
 
-	if file, err = os.Open(fname, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perm); err != nil {
+	if file, err = os.Create(fname); err != nil {
 		return err
 	}
     const BufSize = 256
