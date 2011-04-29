@@ -3,14 +3,23 @@ package main
 import (
         "fmt"
         "strings"
+        "strconv"
         "flag"
+        "log"
         "./configfile"
 )
 
 func loadlist(m map[int]string) {
     c := make(chan string);
     tf := make(chan map[string]string);
-    ts := 3
+    ts := 5
+    p, _ := configfile.ReadConfigFile("config.cfg");
+
+    if tsc, err := p.GetString("GenSetting","OThread"); err == nil {
+        fmt.Printf("Thread: %s\n",tsc)
+        ts, err = strconv.Atoi(tsc)
+    }
+
     jobsplit:=len(m)/ts;
     jobmod:=len(m)%ts;
     for i := 0; i < ts ; i++ {
@@ -28,7 +37,6 @@ func loadlist(m map[int]string) {
     for _, url := range m {
         c <- url;
     }
-    p, _ := configfile.ReadConfigFile("config.cfg");
 
     ed2kurldb:=NewURLStore("ed2kurl.gmap")
     lock:=0
@@ -50,6 +58,7 @@ func printamule(el string,p *configfile.ConfigFile){
     ars,_:=p.GetString("amule","ARS")
     arp,_:=p.GetString("amule","ARP")
     arps,_:=p.GetString("amule","ARPS")
+
     fmt.Printf("amulecmd --host=%s -p %s -P %s -c \"add %s\"\n",ars,arp,arps,el)
 }
 

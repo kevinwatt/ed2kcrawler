@@ -10,6 +10,9 @@ Build ed2kcrawler
     
 Create an config.cfg file
 
+    [GenSetting]
+    OThread = 3
+
     [amule]
     ARS = 10.8.0.1
     ARP = 4712
