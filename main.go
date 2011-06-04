@@ -5,7 +5,7 @@ import (
         "strings"
         "strconv"
         "flag"
-        "log"
+	"os"
         "./configfile"
 )
 
@@ -13,7 +13,12 @@ func loadlist(m map[int]string) {
     c := make(chan string);
     tf := make(chan map[string]string);
     ts := 5
-    p, _ := configfile.ReadConfigFile("config.cfg");
+    p, err := configfile.ReadConfigFile("config.cfg"); 
+    if err != nil {
+	fmt.Printf("can't open file; err=%s\n",  err.String())
+	os.Exit(1)
+    }
+
 
     if tsc, err := p.GetString("GenSetting","OThread"); err == nil {
         fmt.Printf("Thread: %s\n",tsc)
