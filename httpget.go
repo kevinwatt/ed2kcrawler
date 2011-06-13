@@ -17,10 +17,13 @@ func hasPort(s string) bool { return strings.LastIndex(s, ":") > strings.LastInd
 
 func Get(url string) (string, os.Error) {
     //var b []byte;
-    resp,_,err := http.Get(url)
-    b , _ := ioutil.ReadAll(resp.Body)
-    resp.Body.Close();
-    return string(b),err
+    var err os.Error;
+    if resp, err := http.Get(url); err == nil {
+	    b , err := ioutil.ReadAll(resp.Body)
+	    resp.Body.Close();
+	    return string(b),err
+    }
+    return "error",err
 }
 
 func URLUnescape(edurl string) string {

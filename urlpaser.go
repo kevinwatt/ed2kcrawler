@@ -3,6 +3,7 @@ package main
 import (
         "regexp";
         "strings";
+	"fmt";
 )
 
 type URLParse struct {
@@ -37,7 +38,9 @@ func (up *URLParse) urlparser(c chan string, tf chan map[string]string) {
                     }
                 }
             }
-        }
+        }else{
+	    fmt.Printf("can't open url; err=%s\n",  err.String())
+	}
     }
     tf<-parsedlink;
     return;

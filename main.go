@@ -36,6 +36,7 @@ func loadlist(m map[int]string) {
         }else{
             s.size=jobsplit
         }
+	fmt.Printf("ts: %d\n",ts);
         go s.urlparser(c,tf);
     }
 
