@@ -15,13 +15,13 @@ type readClose struct {
 
 func hasPort(s string) bool { return strings.LastIndex(s, ":") > strings.LastIndex(s, "]") }
 
-func Get(url string) (string, os.Error) {
-    //var b []byte;
+func ContGet(url string) (string, os.Error) {
+
     var err os.Error;
-    if resp, err := http.Get(url); err == nil {
-	    b , err := ioutil.ReadAll(resp.Body)
-	    resp.Body.Close();
-	    return string(b),err
+    if resp, _, err := http.Get(url); err == nil {
+            b , err := ioutil.ReadAll(resp.Body)
+            resp.Body.Close();
+            return string(b),err
     }
     return "error",err
 }
