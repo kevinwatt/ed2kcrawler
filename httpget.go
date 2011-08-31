@@ -26,9 +26,3 @@ func Get(url string) (string, os.Error) {
     return "error",err
 }
 
-func URLUnescape(edurl string) string {
-    edurl , _ = http.URLUnescape(edurl);
-    return edurl;
-}
-
-
