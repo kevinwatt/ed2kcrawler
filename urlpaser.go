@@ -17,7 +17,7 @@ func (up *URLParse) urlparser(c chan string, tf chan map[string]string) {
     re,_ := regexp.Compile("<([^>]|\n)*>|\t|\r");
     parsedlink:= make(map[string]string)
     for i := 0; i < up.size; i++ {
-        if pas,err := Get(<-c); err == nil {
+        if pas,err := ContGet(<-c); err == nil {
             pas = ed2k.ReplaceAllString(pas,">\ned2k://");
             pas = re.ReplaceAllString(pas,"\n");
             pasarray := strings.Split(pas,"\n");
