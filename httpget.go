@@ -18,7 +18,8 @@ func hasPort(s string) bool { return strings.LastIndex(s, ":") > strings.LastInd
 func ContGet(url string) (string, os.Error) {
 
     var err os.Error;
-    if resp, _, err := http.Get(url); err == nil {
+    resp, err := http.Get(url);
+    if err == nil {
             b , err := ioutil.ReadAll(resp.Body)
             resp.Body.Close();
             return string(b),err
